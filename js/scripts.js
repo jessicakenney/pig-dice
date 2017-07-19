@@ -7,20 +7,17 @@ function Player(number, turnTotal, gameTotal){
 function diceRoller() {
   return Math.floor(Math.random() * 6) + 1;
 }
-function isOne(number){
-  return number === 1;
-}
 function getSum(numbers){
   var sum = 0;
   numbers.forEach(function(number) {
     sum += number;
-  });
+  })
   return sum;
 }
 
 $(document).ready(function() {
   var rolls= [];
-  var turn = 1;
+  var turnOver = 0;
   var hold = 0;
   $("#roll1").click(function() {
 
@@ -28,15 +25,19 @@ $(document).ready(function() {
     rolls.push(roll);
 
     $(".die1").text(roll);
+    if(roll=== 1){
+      turnOver = 1;
+      alert("Turn Over: 1 rolled")
+      $("#turnTotal").text("0");
+    }else{
+      $("#turnTotal").text(getSum(rolls));
+    }
 
-    //alert(isOne(roll));
-  $("#hold1").click(function() {
-    alert(getSum(rolls));
-    alert("Working!")
 });
-
-
-
-  });
+  $("#hold1").click(function() {
+    hold = 1;
+    //$("#turnTotal").text(getSum(rolls));
+    //alert("Working!");
+});
 
 });
