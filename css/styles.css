@@ -1,4 +1,4 @@
-.die1 {
+.die {
   display: block;
   height: 100px;
   width:  100px;
@@ -6,14 +6,21 @@
   border-radius: 10px;
   font-size: 50px;
   text-align: center;
-  margin-bottom: 1em;
+  margin: auto auto 10px;
+}
+.col-md-6{
+  text-align: center;
 }
  h1.text-center{
   font-family: 'Coiny', cursive;
   color: #FF69B4;
 }
-jumbotron{
-  background-color:  #FFC0CB;
-  border-radius: 1em;
-  padding:
+.jumbotron{
+  background-color: #FFC0CB;
+  border-radius: 2em;
+  margin: 1em;
+  padding: auto;
+}
+body{
+  background-image: url(pig.jpg);
 }
