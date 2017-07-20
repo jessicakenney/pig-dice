@@ -24,3 +24,13 @@
 body{
   background-image: url(pig.jpg);
 }
+#pig{
+  background-image: url(pig_2.png);
+  display: none;
+  width: 220px;
+  height: 220px;
+  margin: 0 auto;
+  font-family: 'Coiny', cursive;
+  font-size: 40px;
+  text-align: center;
+}

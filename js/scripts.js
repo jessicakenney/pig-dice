@@ -10,14 +10,20 @@ function Player (user) {
   this.gameTotal = 0;
   this.turn = 0;
 }
+
 Player.prototype.rollDice =function() {
   return Math.floor(Math.random() * 6) + 1;
 }
 Player.prototype.endTurn = function(){
   //this.turn = 0;//put into toggleturn
   this.gameTotal += this.turnTotal;
-  this.turnTotal = 0;
-  return this.rolls =[];
+  if(this.gameTotal>= 20){
+    //using gameTotal==1 to flag game over in frontend
+    return this.gameTotal = 1;
+  }else{
+    this.turnTotal = 0;
+    return this.rolls =[];
+  }
 }
 Player.prototype.rollAgain = function(roll){
   this.rolls.push(roll);
@@ -66,7 +72,12 @@ $(document).ready(function() {
     pigGame.player1.endTurn();
     pigGame.toggleTurns();
     $("#turnTotal1").text(pigGame.player1.turnTotal);
-    $("#gameTotal1").text(pigGame.player1.gameTotal);
+    if (player1.gameTotal === 1){
+      $("#gameTotal1").text("Oink Oink");
+      $("#pig").show();
+    } else {
+      $("#gameTotal1").text(pigGame.player1.gameTotal);
+    }
   });
 
   $("#roll2").click(function() {
@@ -87,7 +98,12 @@ $(document).ready(function() {
     pigGame.player2.endTurn();
     pigGame.toggleTurns();
     $("#turnTotal2").text(pigGame.player2.turnTotal);
-    $("#gameTotal2").text(pigGame.player2.gameTotal);
+    if (player2.gameTotal === 1){
+      $("#gameTotal2").text("Oink Oink");
+      $("#pig").show();
+    } else {
+      $("#gameTotal2").text(pigGame.player2.gameTotal);
+    }
   });
 
 });
