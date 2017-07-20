@@ -53,7 +53,6 @@ $(document).ready(function() {
       pigGame.toggleTurns();
       pigGame.player1.turnTotal = 0;
       pigGame.player1.endTurn();
-      if (!pigGame.player1.turn) {$("#roll1").hide();}
       $(".die1").text(roll);
       $("#turnTotal1").text(pigGame.player1.turnTotal);
     } else if (pigGame.player1.turn) {
