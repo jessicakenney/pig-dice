@@ -1,3 +1,8 @@
+function Game(name,player1,player2) {
+  this.name = name;
+  this.player1 = player1;
+  this.player2 = player2;
+}
 function Player (user) {
   this.number = user;
   this.rolls = [];
@@ -6,30 +11,24 @@ function Player (user) {
   this.turn = 0;
 }
 
-Player.prototype.diceRoller =function() {
+Player.prototype.rollDice =function() {
   return Math.floor(Math.random() * 6) + 1;
 }
 
-Player.prototype.testHold = function(){
-  this.turn = 0;
+Player.prototype.endTurn = function(){
+  //this.turn = 0;//put into toggleturn
   this.gameTotal += this.turnTotal;
   this.turnTotal = 0;
   return this.rolls =[];
 }
-
-
-Player.prototype.takeTurn = function(roll){
+Player.prototype.rollAgain = function(roll){
   this.rolls.push(roll);
-  if(roll=== 1){
-    this.turn = 0;
-    this.rolls = [];
-    return 0;
-  }else {
-    return getSum(this.rolls);
-    //$("#turnTotal").text(getSum(player1.rolls));
-  }
+  return getSum(this.rolls);
 }
-
+Game.prototype.toggleTurns = function(){
+  this.player1.turn = !this.player1.turn;
+  this.player2.turn = !this.player2.turn;
+}
 function getSum(numbers){
   var sum = 0;
   numbers.forEach(function(number) {
@@ -41,42 +40,52 @@ function getSum(numbers){
 $(document).ready(function() {
   var player1 = new Player ("1");
   var player2 = new Player ("2");
-  player1.turn = 1;
+  var pigGame = new Game ("Pig",player1,player2);
+
+//player1 goes first
+  pigGame.player1.turn = 1;
+  pigGame.player2.turn = 0;
 
   $("#roll1").click(function() {
-    var roll = player1.diceRoller();
-    if (player1.turn) {
+    var roll = player1.rollDice();
+    if (roll === 1){
+      pigGame.toggleTurns();
+      pigGame.player1.turnTotal = 0;
       $(".die1").text(roll);
-      player1.turnTotal = player1.takeTurn(roll);
-      $("#turnTotal1").text(player1.turnTotal);
-    }else{
-      player2.turn = 1;
-      player1.turnTotal = 0;
+      $("#turnTotal1").text(pigGame.player1.turnTotal);
+      pigGame.player1.endTurn();
+    } else if (pigGame.player1.turn) {
+        pigGame.player1.turnTotal = pigGame.player1.rollAgain(roll);
+        $(".die1").text(roll);
+        $("#turnTotal1").text(pigGame.player1.turnTotal);
     }
   });
   $("#hold1").click(function() {
-    player1.testHold();
-    player2.turn = 1;
-    $("#turnTotal1").text(player1.turnTotal);
-    $("#gameTotal1").text(player1.gameTotal);
+    pigGame.player1.endTurn();
+    pigGame.toggleTurns();
+    $("#turnTotal1").text(pigGame.player1.turnTotal);
+    $("#gameTotal1").text(pigGame.player1.gameTotal);
+  });
 
-});
-$("#roll2").click(function() {
-  var roll = player2.diceRoller();
-  if (player2.turn) {
-    $(".die2").text(roll);
-    player2.turnTotal = player2.takeTurn(roll);
-    $("#turnTotal2").text(player2.turnTotal);
-  }else{
-    player1.turn = 1;
-    player2.turnTotal = 0;
-  }
-});
-$("#hold2").click(function() {
-  player2.testHold()
-  player1.turn = 1;
-  $("#turnTotal2").text(player2.turnTotal);
-  $("#gameTotal2").text(player2.gameTotal);
-});
+  $("#roll2").click(function() {
+    var roll = pigGame.player2.rollDice();
+    if (roll === 1){
+      pigGame.player2.turnTotal = 0;
+      pigGame.toggleTurns();
+      pigGame.player2.endTurn();
+      $(".die2").text(roll);
+      $("#turnTotal2").text(pigGame.player2.turnTotal);
+    } else if (pigGame.player2.turn) {
+        pigGame.player2.turnTotal = pigGame.player2.rollAgain(roll);
+        $(".die2").text(roll);
+        $("#turnTotal2").text(pigGame.player2.turnTotal);
+    }
+  });
+  $("#hold2").click(function() {
+    pigGame.player2.endTurn();
+    pigGame.toggleTurns();
+    $("#turnTotal2").text(pigGame.player2.turnTotal);
+    $("#gameTotal2").text(pigGame.player2.gameTotal);
+  });
 
 });
