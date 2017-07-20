@@ -10,11 +10,9 @@ function Player (user) {
   this.gameTotal = 0;
   this.turn = 0;
 }
-
 Player.prototype.rollDice =function() {
   return Math.floor(Math.random() * 6) + 1;
 }
-
 Player.prototype.endTurn = function(){
   //this.turn = 0;//put into toggleturn
   this.gameTotal += this.turnTotal;
@@ -28,6 +26,8 @@ Player.prototype.rollAgain = function(roll){
 Game.prototype.toggleTurns = function(){
   this.player1.turn = !this.player1.turn;
   this.player2.turn = !this.player2.turn;
+  $("#roll1,#hold1").toggle();
+  $("#roll2,#hold2").toggle();
 }
 function getSum(numbers){
   var sum = 0;
@@ -36,7 +36,6 @@ function getSum(numbers){
   })
   return sum;
 }
-
 $(document).ready(function() {
   var player1 = new Player ("1");
   var player2 = new Player ("2");
@@ -45,16 +44,20 @@ $(document).ready(function() {
 //player1 goes first
   pigGame.player1.turn = 1;
   pigGame.player2.turn = 0;
+  $("#roll1,#hold1").show();
+  $("#roll2,#hold2").hide();
 
   $("#roll1").click(function() {
     var roll = player1.rollDice();
     if (roll === 1){
       pigGame.toggleTurns();
       pigGame.player1.turnTotal = 0;
+      pigGame.player1.endTurn();
+      if (!pigGame.player1.turn) {$("#roll1").hide();}
       $(".die1").text(roll);
       $("#turnTotal1").text(pigGame.player1.turnTotal);
-      pigGame.player1.endTurn();
     } else if (pigGame.player1.turn) {
+        if (pigGame.player1.turn) {$("#roll1").show();}
         pigGame.player1.turnTotal = pigGame.player1.rollAgain(roll);
         $(".die1").text(roll);
         $("#turnTotal1").text(pigGame.player1.turnTotal);
